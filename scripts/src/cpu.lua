@@ -4006,3 +4006,19 @@ if opt_tool(CPUS, "PALM") then
 	table.insert(disasm_files , MAME_DIR .. "src/devices/cpu/palm/palmd.cpp")
 	table.insert(disasm_files , MAME_DIR .. "src/devices/cpu/palm/palmd.h")
 end
+
+--------------------------------------------------
+-- Kenbak-1
+--@src/devices/cpu/kenbak1/kenbak1.h,CPUS["KENBAK1"] = true
+--------------------------------------------------
+
+if CPUS["KENBAK1"] then
+	files {
+		MAME_DIR .. "src/devices/cpu/kenbak1/kenbak1.h",
+		MAME_DIR .. "src/devices/cpu/kenbak1/kenbak1.cpp",
+		MAME_DIR .. "src/devices/cpu/kenbak1/kenbak1dasm.h",
+		MAME_DIR .. "src/devices/cpu/kenbak1/kenbak1dasm.cpp",
+		MAME_DIR .. "src/devices/cpu/kenbak1/kenbak1types.h",
+		MAME_DIR .. "src/devices/cpu/kenbak1/kenbak1types.cpp",
+	}
+end

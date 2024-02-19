@@ -23564,6 +23564,9 @@ omni2                           // Omni II
 omni4                           // Omni 4
 robie                           // Kaypro Robie
 
+@source:kenbak/kenbak1.cpp
+kenbak1                         // Kenbak-1
+
 @source:kiwako/jongkyo.cpp
 jongkyo                         // (c) 1985 Kiwako
 
