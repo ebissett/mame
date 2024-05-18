@@ -18,7 +18,9 @@
  *   - Run in debugger seems to clear halt (how? why?)
  *      + The RUN lamp isn't illuminated but m_halt is cleared.  So set_halt() is not being called.
  *      + Doesn't matter if m_halt is private.
- *   - Hard reset segfaults
+ *
+ * ERRATA:
+ *   - Hard reset segfaults.  Stock main does same thing.  QT problem of some kind.
  *
  *****************************************************************************/
 
