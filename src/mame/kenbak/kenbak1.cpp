@@ -14,7 +14,6 @@
  *
  * BUGS:
  *   - CPU writes to IN should be blocked?
- *   - kenbak1_state::m_ram isn't connected to CPU memory map.  Is there a point to this?  Runs fine without it.
  *
  * ERRATA:
  *   - Hard reset segfaults.  Stock main does same thing.  QT problem of some kind.
@@ -42,7 +41,6 @@ public:
 	kenbak1_state(const machine_config &mconfig, device_type type, const char *tag)
 		: driver_device(mconfig, type, tag)
 		, m_maincpu(*this, "maincpu")
-		, m_ram(*this, "mainram")
 		, m_display(*this, "display")
 		, m_data_input(*this, "data")
 		, m_ctrl_input(*this, "control")
@@ -81,7 +79,6 @@ private:
 	void cpu_update_halt(u8 data);
 
 	required_device<kenbak1_cpu_device> m_maincpu;
-	required_shared_ptr<uint8_t> m_ram;
 	required_device<pwm_display_device> m_display;
 	required_ioport m_data_input;
 	required_ioport m_ctrl_input;
