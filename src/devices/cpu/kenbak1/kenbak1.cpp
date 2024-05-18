@@ -133,6 +133,7 @@ void kenbak1_cpu_device::execute_run()
 			m_icount -= 2000;
 
 			m_write_out(m_OUT);
+			m_write_halt(m_halt);
 		}
 	} while (m_icount > 0);
 }
@@ -258,7 +259,7 @@ void kenbak1_cpu_device::execute_one()
 			// Do nothing
 			break;
 		case kenbak1_opcode::HALT:
-			set_halt(true);
+			m_halt = true;
 			break;
 		default:
 			// Shouldn't get here
