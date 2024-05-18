@@ -304,8 +304,8 @@ void kenbak1_cpu_device::op_lneg(const kenbak1_opcode &opcode, u8 param)
 {
 	s8 val = read_param(opcode.get_param(), param);
 	if (val == -128) {
+		// Overflow condition, however it does not alter OCA
 		*reg_from_id(opcode.get_reg()) = val;
-		// TODO: Overflow/Carry
 	}
 	else {
 		*reg_from_id(opcode.get_reg()) = -val;
