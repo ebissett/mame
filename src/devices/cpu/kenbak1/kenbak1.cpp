@@ -145,9 +145,9 @@ u8 kenbak1_cpu_device::fetch()
 	return opcode;
 }
 
-u8* kenbak1_cpu_device::reg_from_id(kenbak1_reg::id val)
+u8* kenbak1_cpu_device::reg_from_id(kenbak1_reg::id reg_id)
 {
-	switch (val) {
+	switch (reg_id) {
 		case kenbak1_reg::A:   return &m_A;
 		case kenbak1_reg::B:   return &m_B;
 		case kenbak1_reg::X:   return &m_X;
@@ -268,26 +268,11 @@ void kenbak1_cpu_device::execute_one()
 	}
 }
 
-#define BIT_FLAG_OF	(1 << 0)		// Overflow
-#define BIT_FLAG_CA	(1 << 1)		// Carry
-#define SIGN_BIT(X)	(X & (1 << 7))
-
-void kenbak1_cpu_device::op_add(const kenbak1_opcode &opcode, u8 param)
+void kenbak1_cpu_device::set_oc_reg(kenbak1_reg::id reg_id, bool carry, bool overflow)
 {
-	u8 *reg = reg_from_id(opcode.get_reg());
-	u8 a = *reg;
-	u8 b = read_param(opcode.get_param(), param);
-	u16 result = a + b;
+	u8 oc_val = (carry ? 0x1 : 0) | (overflow ? 0x2 : 0);
 
-	u8 oc_val = 0;
-	if (result & (1 << 8)) {
-		oc_val |= BIT_FLAG_CA;
-	}
-	if ( (SIGN_BIT(a) == SIGN_BIT(b)) && (SIGN_BIT(a) != SIGN_BIT(result)) ) {
-		oc_val |= BIT_FLAG_OF;
-	}
-
-	switch (opcode.get_reg()) {
+	switch (reg_id) {
 		case kenbak1_reg::A:
 			m_OCA = oc_val;
 			break;
@@ -302,14 +287,36 @@ void kenbak1_cpu_device::op_add(const kenbak1_opcode &opcode, u8 param)
 			assert(false);
 			break;
 	}
+}
 
-	*reg = (u8)result;
+void kenbak1_cpu_device::op_add(const kenbak1_opcode &opcode, u8 param)
+{
+	u8 *reg = reg_from_id(opcode.get_reg());
+	u8 a = *reg;
+	u8 b = read_param(opcode.get_param(), param);
+	*reg = a + b;
+
+	u16 uresult = (u16)a + (u16)b;
+	s16 sresult = (s16)(s8)a + (s16)(s8)b;
+
+	set_oc_reg(opcode.get_reg(),
+			   (u8)*reg != uresult,		// Carry
+			   (s8)*reg != sresult);	// Overflow
 }
 
 void kenbak1_cpu_device::op_sub(const kenbak1_opcode &opcode, u8 param)
 {
-	*reg_from_id(opcode.get_reg()) -= read_param(opcode.get_param(), param);
-	// TODO: Overflow/Carry
+	u8 *reg = reg_from_id(opcode.get_reg());
+	u8 a = *reg;
+	u8 b = read_param(opcode.get_param(), param);
+	*reg = a - b;
+
+	u16 uresult = (u16)a - (u16)b;
+	s16 sresult = (s16)(s8)a - (s16)(s8)b;
+
+	set_oc_reg(opcode.get_reg(),
+			   (u8)*reg != uresult,		// Carry
+			   (s8)*reg != sresult);	// Overflow
 }
 
 void kenbak1_cpu_device::op_load(const kenbak1_opcode &opcode, u8 param)

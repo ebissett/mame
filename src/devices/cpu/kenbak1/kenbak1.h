@@ -69,6 +69,8 @@ protected:
 	u8 fetch();
 	void execute_one();
 
+    void set_oc_reg(kenbak1_reg::id reg_id, bool carry, bool overflow);
+
 	void op_add(const kenbak1_opcode &opcode, u8 param);
 	void op_sub(const kenbak1_opcode &opcode, u8 param);
 	void op_load(const kenbak1_opcode &opcode, u8 param);

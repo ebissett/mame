@@ -7,7 +7,6 @@
  * TODO:
  *   - Front panel functions
  *   - Input lock/unlock switch (blocks Store button)
- *   - CPU overflow & carry logic
  *   - CPU accurate timing
  *   - Check ProgRef for accurate state behavior
  *   - Original HW in run state used dim lamps to show OUT if IN is set to non-zero
