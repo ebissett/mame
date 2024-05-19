@@ -268,10 +268,42 @@ void kenbak1_cpu_device::execute_one()
 	}
 }
 
+#define BIT_FLAG_OF	(1 << 0)		// Overflow
+#define BIT_FLAG_CA	(1 << 1)		// Carry
+#define SIGN_BIT(X)	(X & (1 << 7))
+
 void kenbak1_cpu_device::op_add(const kenbak1_opcode &opcode, u8 param)
 {
-	*reg_from_id(opcode.get_reg()) += read_param(opcode.get_param(), param);
-	// TODO: Overflow/Carry
+	u8 *reg = reg_from_id(opcode.get_reg());
+	u8 a = *reg;
+	u8 b = read_param(opcode.get_param(), param);
+	u16 result = a + b;
+
+	u8 oc_val = 0;
+	if (result & (1 << 8)) {
+		oc_val |= BIT_FLAG_CA;
+	}
+	if ( (SIGN_BIT(a) == SIGN_BIT(b)) && (SIGN_BIT(a) != SIGN_BIT(result)) ) {
+		oc_val |= BIT_FLAG_OF;
+	}
+
+	switch (opcode.get_reg()) {
+		case kenbak1_reg::A:
+			m_OCA = oc_val;
+			break;
+		case kenbak1_reg::B:
+			m_OCB = oc_val;
+			break;
+		case kenbak1_reg::X:
+			m_OCX = oc_val;
+			break;
+		default:
+			// Shouldn't get here
+			assert(false);
+			break;
+	}
+
+	*reg = (u8)result;
 }
 
 void kenbak1_cpu_device::op_sub(const kenbak1_opcode &opcode, u8 param)
