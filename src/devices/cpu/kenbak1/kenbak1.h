@@ -26,8 +26,13 @@ public:
 
 	// Control functions
 	void set_input_bit(u8 bit) { m_IN |= 1 << bit; }
-	void clear_input(u8 bit)   { m_IN = 0; }
+	void clear_input()         { m_IN = 0; }
 	u8 get_input()             { return m_IN; }
+
+	void set_address()         { m_address = m_IN; }
+	void display_address()     { m_OUT = m_address; }
+	void store_value()         { m_program.write_byte(m_address++, m_IN); }
+	void read_value()          { m_OUT = m_program.read_byte(m_address); }
 
 	void set_halt(bool halt);
 	bool get_halt() { return m_halt; }
@@ -94,6 +99,8 @@ protected:
 	bool                 m_halt;
 
 	u8 m_A, m_B, m_X, m_P, m_OUT, m_OCA, m_OCB, m_OCX, m_IN;
+
+	u8 m_address;
 
 	memory_access<8, 0, 0, ENDIANNESS_LITTLE>::specific m_program;
 

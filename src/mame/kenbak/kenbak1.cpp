@@ -160,23 +160,27 @@ INPUT_CHANGED_MEMBER(kenbak1_state::push_button)
 
 			case BUTTON_CLEAR:
 				printf("%s:%d: CLEAR\n", __FUNCTION__, __LINE__);
-				m_maincpu.target()->clear_input(param);
+				m_maincpu.target()->clear_input();
 				break;
 
 			case BUTTON_DISPLAY:
 				printf("%s:%d: DISPLAY\n", __FUNCTION__, __LINE__);
+				m_maincpu.target()->display_address();
 				break;
 
 			case BUTTON_SET:
 				printf("%s:%d: SET\n", __FUNCTION__, __LINE__);
+				m_maincpu.target()->set_address();
 				break;
 
 			case BUTTON_READ:
 				printf("%s:%d: READ\n", __FUNCTION__, __LINE__);
+				m_maincpu.target()->read_value();
 				break;
 
 			case BUTTON_STORE:
 				printf("%s:%d: STORE\n", __FUNCTION__, __LINE__);
+				m_maincpu.target()->store_value();
 				break;
 
 			case BUTTON_START:

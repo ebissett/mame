@@ -26,6 +26,7 @@ kenbak1_cpu_device::kenbak1_cpu_device(const machine_config &mconfig, device_typ
 	, m_OCB(0)
 	, m_OCX(0)
 	, m_IN(0)
+	, m_address(0)
 	, m_write_out(*this)
 	, m_write_halt(*this)
 {}
